@@ -13,7 +13,7 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 
-class JkImagePicker() {
+object JkImagePicker {
     fun initMethodChannel(flutterEngine: FlutterEngine, context: Context){
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, AppConstant.CHANNEL_JK_PICKER).setMethodCallHandler { call: MethodCall, result: MethodChannel.Result ->
             when (call.method){
