@@ -11,6 +11,7 @@ import UIKit
 import SwiftUI
 
 
+@available(iOS 15.0, *)
 class JKCameraWidget: NSObject, FlutterPlatformView {
     
     private var hostingController: UIHostingController<JKCameraView>
