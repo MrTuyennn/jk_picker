@@ -183,9 +183,33 @@
 			path = Runner;
 			sourceTree = "<group>";
 		};
+		C0058B262E3CB4E8008D283A /* jk_photo */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = jk_photo;
+			sourceTree = "<group>";
+		};
+		C0058B272E3CB4F6008D283A /* camera */ = {
+			isa = PBXGroup;
+			children = (
+				C0CE3DDC2E3B272D00007061 /* Camera.swift */,
+				C0CE3DDA2E3B26B400007061 /* CameraModel.swift */,
+			);
+			path = camera;
+			sourceTree = "<group>";
+		};
+		C0058B282E3CB503008D283A /* photo */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = photo;
+			sourceTree = "<group>";
+		};
 		C0A20CC02E38A56A00C7B95A /* module */ = {
 			isa = PBXGroup;
 			children = (
+				C0058B262E3CB4E8008D283A /* jk_photo */,
 				C0CE3DD32E3B181700007061 /* jk_camera_preview */,
 				C0A20CC32E38A70700C7B95A /* jk_image_picker */,
 			);
@@ -203,8 +227,8 @@
 		C0A20CC22E38A57900C7B95A /* model */ = {
 			isa = PBXGroup;
 			children = (
-				C0CE3DDC2E3B272D00007061 /* Camera.swift */,
-				C0CE3DDA2E3B26B400007061 /* CameraModel.swift */,
+				C0058B282E3CB503008D283A /* photo */,
+				C0058B272E3CB4F6008D283A /* camera */,
 			);
 			path = model;
 			sourceTree = "<group>";
