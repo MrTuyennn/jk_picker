@@ -29,6 +29,9 @@
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 
+	<!-- Quyền truy cập camera  -->
+	<key>NSCameraUsageDescription</key>
+    <string>The app needs access to the camera to take photos.</string>
 	<!-- Quyền truy cập Photo Library -->
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>The app needs access to the photo library to select images.</string>

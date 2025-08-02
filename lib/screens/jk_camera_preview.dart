@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:jk_picker/components/jk_text.dart';
+import 'package:flutter/services.dart';
+import 'package:jk_picker/extensions/channel/channel.dart';
 import 'package:jk_picker/extensions/components/screen_main.dart';
 
 class JkCameraPreview extends StatefulWidget {
@@ -12,6 +13,14 @@ class JkCameraPreview extends StatefulWidget {
 class _JkCameraPreviewState extends State<JkCameraPreview> {
   @override
   Widget build(BuildContext context) {
-    return const ScreenMain(child: JkText(text: 'text'));
+    return ScreenMain(
+        child: Center(
+      child: UiKitView(
+        viewType: jkCameraID,
+        creationParams: const {},
+        layoutDirection: TextDirection.ltr,
+        creationParamsCodec: const StandardMessageCodec(),
+      ),
+    ));
   }
 }
