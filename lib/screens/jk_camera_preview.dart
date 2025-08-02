@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:jk_picker/extensions/channel/channel.dart';
@@ -15,12 +17,20 @@ class _JkCameraPreviewState extends State<JkCameraPreview> {
   Widget build(BuildContext context) {
     return ScreenMain(
         child: Center(
-      child: UiKitView(
-        viewType: jkCameraID,
-        creationParams: const {},
-        layoutDirection: TextDirection.ltr,
-        creationParamsCodec: const StandardMessageCodec(),
-      ),
+      child: Platform.isIOS
+          ? UiKitView(
+              viewType: jkCameraID,
+              creationParams: const {},
+              layoutDirection: TextDirection.ltr,
+              creationParamsCodec: const StandardMessageCodec(),
+            )
+          : AndroidView(
+              key: UniqueKey(),
+              viewType: jkCameraID,
+              creationParams: const {},
+              layoutDirection: TextDirection.ltr,
+              creationParamsCodec: const StandardMessageCodec(),
+            ),
     ));
   }
 }

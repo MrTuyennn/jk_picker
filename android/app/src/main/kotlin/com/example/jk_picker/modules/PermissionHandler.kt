@@ -8,7 +8,7 @@ import androidx.core.content.ContextCompat
 
 class PermissionHandler {
     private val IMAGE_PERMISSION_REQUEST_CODE = 2001
-    private val CAMERA_PERMISSION_REQUEST_CODE = 2002
+    val CAMERA_PERMISSION_REQUEST_CODE = 2002
 
     fun hasPermission(activity: Activity): Boolean{
         return if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.TIRAMISU){

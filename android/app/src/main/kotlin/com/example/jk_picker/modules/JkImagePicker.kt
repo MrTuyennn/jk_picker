@@ -5,8 +5,6 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.MediaStore
-import android.provider.MediaStore.Images.Media
-import android.util.Log
 import androidx.core.content.ContextCompat
 import com.example.jk_picker.utils.AppConstant
 import io.flutter.embedding.engine.FlutterEngine
@@ -28,6 +26,14 @@ object JkImagePicker {
                 }
                 AppConstant.METHOD_GET_IMAGE ->{}
                 AppConstant.METHOD_GET_ASSETSINALBUM ->{}
+                AppConstant.METHOD_CAMERA_PERMISSION->{
+                    if (PermissionHandler().hasCameraPermission(context as Activity)) {
+                        result.success(true)
+                    } else {
+                        PermissionHandler().requestCameraPermission(context)
+                        result.success(false) // Flutter sẽ đợi được xin quyền
+                    }
+                }
                 else ->{
                     result.notImplemented()
                 }

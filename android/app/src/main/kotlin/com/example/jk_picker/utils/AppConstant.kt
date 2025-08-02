@@ -8,6 +8,8 @@ class AppConstant {
         const val METHOD_GET_IMAGE="methodGetImage"
 
         const val CHANNEL_JK_CAMERA = "channelJKCamera"
+        const val METHOD_CAMERA_PERMISSION = "methodCameraPermission"
+        const val METHOD_REQUEST_CAMERA_PERMISSION= "methodRequestCameraPermission"
     }
 
 }
