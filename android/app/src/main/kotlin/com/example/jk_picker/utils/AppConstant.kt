@@ -6,6 +6,8 @@ class AppConstant {
         const val METHOD_GET_ALBUMS = "methodGetAlbums"
         const val METHOD_GET_ASSETSINALBUM = "methodGetAssetsInAlbum"
         const val METHOD_GET_IMAGE="methodGetImage"
+
+        const val CHANNEL_JK_CAMERA = "channelJKCamera"
     }
 
 }

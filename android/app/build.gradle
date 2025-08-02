@@ -42,3 +42,30 @@ android {
 flutter {
     source = "../.."
 }
+dependencies {
+    // CameraX core library using the camera2 implementation
+    def camerax_version = "1.4.2"
+
+    implementation "androidx.camera:camera-camera2:$camerax_version"
+    implementation "androidx.camera:camera-core:$camerax_version"
+    implementation "androidx.camera:camera-lifecycle:$camerax_version"
+    implementation "androidx.camera:camera-view:$camerax_version"
+    implementation "androidx.camera:camera-video:$camerax_version"
+    implementation "androidx.camera:camera-mlkit-vision:$camerax_version"
+    implementation "androidx.camera:camera-extensions:$camerax_version"
+
+
+//// ML Kit integration (instead of camera-mlkit-vision)
+    implementation "com.google.mlkit:face-detection:16.1.7"
+//
+//
+    def composeVersion = "1.5.4"
+//
+// Optional - Accompanist for permission handling
+    implementation("androidx.activity:activity-compose:1.8.2")
+    implementation("androidx.compose.ui:ui:$composeVersion")
+    implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
+    implementation("androidx.compose.material:material:$composeVersion") // Material Design
+    debugImplementation("androidx.compose.ui:ui-tooling:$composeVersion")
+}
+
