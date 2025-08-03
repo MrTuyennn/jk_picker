@@ -24,7 +24,6 @@ class JkCameraWidget(
 ) : PlatformView {
 
     private val cameraView = ComposeView(context)
-    private val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
 
 
     // Sử dụng MutableState để quản lý trạng thái quyền
@@ -45,7 +44,7 @@ class JkCameraWidget(
         cameraView.setContent {
             // UI sẽ tự động cập nhật khi `hasCameraPermission` thay đổi
             if (hasCameraPermission) {
-                JkCameraView(cameraProviderFuture)
+                JkCameraView()
             } else {
                 // Hiển thị UI khi không có quyền
                 PermissionDeniedScreen {
