@@ -1,146 +1,213 @@
 package com.example.jk_picker.modules.JkCameraPreview
 
+import android.content.ContentValues
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Matrix
-import android.media.Image
+import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
 import android.util.Log
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-import android.view.Window
-import android.widget.LinearLayout
+import android.view.Surface
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
-import androidx.camera.core.impl.ImageOutputConfig.RotationDegreesValue
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.displayCutout
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContent
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.Scaffold
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.BottomStart
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.concurrent.futures.await
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.jk_picker.modules.JkCameraPreview.CameraModel.CameraState
-import com.example.jk_picker.modules.JkCameraPreview.CameraModel.CameraViewModel
-import com.google.common.util.concurrent.ListenableFuture
-import org.koin.androidx.compose.koinViewModel
-import java.util.concurrent.Future
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import coil.compose.rememberAsyncImagePainter
+import com.example.jk_picker.NavigationRoutes
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 
 @Composable
-fun JkCameraView(
-    viewModel: CameraViewModel = koinViewModel()
-) {
-    val cameraState:CameraState by viewModel.state.collectAsState()
-    CameraContent(
-        onPhotoCaptured = viewModel:: storePhotoInGallery,
-        lastCapturedPhoto = cameraState.capturedImage
-    )
+fun JkCameraView() {
+    Surface(modifier = Modifier.fillMaxSize()) {
+        val navController = rememberNavController()
+        NavHost(navController = navController, startDestination = NavigationRoutes.Camera.name) {
+            composable(NavigationRoutes.Camera.name) {
+                CameraContent(onPhotoCaptured = {
+                    val encodedUri = Uri.encode(it.toString())
+                    navController.navigate("${NavigationRoutes.Preview.name}?uri=$encodedUri")
+                })
+            }
+            composable(
+                "${NavigationRoutes.Preview.name}?uri={uri}",
+                arguments = listOf(navArgument("uri") {
+                    type =
+                        NavType.StringType
+                })
+            ) {
+
+                val uriString = it.arguments?.getString("uri")
+                val uri = uriString?.let { Uri.parse(uriString) }
+
+                if(uri!=null){
+                    JkPreviewScreen(
+                        photoUri = uri,
+                        onBack = {navController.popBackStack()})
+                }
+            }
+        }
+
+    }
 }
 
 @Composable
-private fun CameraContent(
-    onPhotoCaptured: (Bitmap) -> Unit,
-    lastCapturedPhoto: Bitmap? = null
-
-) {
+private fun CameraContent(onPhotoCaptured:(Uri)->Unit) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
-    val cameraController = remember {
-        LifecycleCameraController(context).apply {
-            cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
-        }
+
+    val previewView = remember {
+        PreviewView(context)
+    }
+    var capturedImageUri by remember {
+        mutableStateOf<Uri?>(null)
     }
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        floatingActionButton = ({
-            ExtendedFloatingActionButton(
-                text = { Text(text = "Take photo") },
-                onClick = { capturePhoto(context, cameraController, onPhotoCaptured) },
-                icon = {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = "Camera capture icon"
-                    )
-                }
-            )
-        })
-    ) { paddingValues: PaddingValues ->
-        AndroidView(
+
+    var imageCapture by remember { mutableStateOf<ImageCapture?>(null) }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black)
+    ) {
+
+        // 1. Camera Preview
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues),
-            factory = {
-                PreviewView(it).apply {
-                    layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-                    setBackgroundColor(android.graphics.Color.WHITE)
-                    implementationMode = PreviewView.ImplementationMode.COMPATIBLE
-                    scaleType = PreviewView.ScaleType.FIT_CENTER
-                }.also { previewView: PreviewView ->
-                    previewView.controller = cameraController
-                    cameraController.bindToLifecycle(lifecycleOwner)
-
+                .background(Color.Red) // nền đen cho toàn bộ
+        ) {
+            AndroidView(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Red),
+                factory = {
+                    previewView.scaleType = PreviewView.ScaleType.FIT_CENTER
+                    previewView
                 }
-            }
-        )
-
-        if(lastCapturedPhoto!=null){
-            LastPhotoPreview(
-                lastCapturedPhoto = lastCapturedPhoto
-
             )
         }
+
+        Row(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .background(Color.Black)
+                .fillMaxWidth()
+                .height(100.dp), // hoặc chiều cao bạn muốn
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight().padding(horizontal = 20.dp)
+            ) {
+                capturedImageUri?.let { uri ->
+                    Image(
+                        painter = rememberAsyncImagePainter(uri),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(60.dp)
+                            .align(Alignment.CenterStart).clickable(onClick = {onPhotoCaptured(uri)}),
+                        contentScale = ContentScale.Crop
+                    )
+                }
+            }
+
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+            ) {
+                CaptureButton(
+                    modifier = Modifier.align(Alignment.Center),
+                    onClick = {
+                        takePhoto(context, imageCapture!!) { uri ->
+                            capturedImageUri = uri
+                        }
+                    }
+                )
+            }
+
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+                    .background(Color.Black)
+            )
+        }
+
+
     }
 
-    // Sử dụng DisposableEffect để đảm bảo camera được hủy liên kết khi rời khỏi màn hình
-    DisposableEffect(lifecycleOwner) {
-        onDispose {
-            cameraController.unbind()
+
+
+
+    LaunchedEffect(previewView) {
+        val cameraProvider = ProcessCameraProvider.getInstance(context).await()
+        val preview = Preview.Builder().build().apply {
+            surfaceProvider = previewView.surfaceProvider
         }
+        val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+
+        val rotation = previewView.display?.rotation ?: Surface.ROTATION_0
+        val newImageCapture = ImageCapture.Builder()
+            .setTargetRotation(rotation)
+            .build()
+
+        imageCapture = newImageCapture // ✅ set đúng instance đã bind
+
+        try {
+            cameraProvider.unbindAll()
+            cameraProvider.bindToLifecycle(lifecycleOwner, cameraSelector, preview, newImageCapture)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
     }
 }
 
@@ -163,55 +230,59 @@ fun PermissionDeniedScreen(onRequestPermission: () -> Unit) {
     }
 }
 
-fun capturePhoto(context: Context, cameraController: LifecycleCameraController, onPhotoCaptured: (Bitmap) -> Unit) {
-    val mainExecutor = ContextCompat.getMainExecutor(context)
-    cameraController.takePicture(mainExecutor, object : ImageCapture.OnImageCapturedCallback(){
-        override fun onCaptureSuccess(image: ImageProxy) {
-            super.onCaptureSuccess(image)
-            val correctedBitmap:Bitmap = image.toBitmap().rotateBitmap(image.imageInfo.rotationDegrees)
-            onPhotoCaptured(correctedBitmap)
-            image.close()
-        }
-
-        override fun onError(exception: ImageCaptureException) {
-            super.onError(exception)
-            Log.e("CameraContent","Error capturing camera", exception)
-        }
-    })
-}
-
 @Composable
-private fun LastPhotoPreview(
-    lastCapturedPhoto: Bitmap
+fun CaptureButton(
+    modifier: Modifier,
+    onClick: () -> Unit
 ) {
-
-    val capturedPhoto: ImageBitmap = remember(lastCapturedPhoto.hashCode()) { lastCapturedPhoto.asImageBitmap() }
-
-    Box (
-        modifier = Modifier.fillMaxSize()
-
-    ){
-        Card(
+    Box(
+        modifier = modifier
+            .size(60.dp)
+            .clip(CircleShape)
+            .background(Color.White)
+            .border(4.dp, Color.LightGray, CircleShape)
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center
+    ) {
+        Box(
             modifier = Modifier
-                .align(Alignment.BottomStart)
-                .size(128.dp)
-                .padding(16.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-            shape = MaterialTheme.shapes.large
-        ) {
-            Image(
-                bitmap = capturedPhoto,
-                contentDescription = "Last captured photo",
-                contentScale = ContentScale.Crop
-            )
-        }
+                .size(50.dp)
+                .clip(CircleShape)
+                .background(Color.Red)
+        )
     }
 }
 
-fun Bitmap.rotateBitmap(degrees: Int): Bitmap {
-    val matrix = Matrix().apply {
-        postRotate(-degrees.toFloat())
-        postScale(-1f, -1f)
+
+fun takePhoto(context: Context, imageCapture: ImageCapture, onImageCapture: (Uri) -> Unit) {
+    val name =
+        SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS", Locale.US).format(System.currentTimeMillis())
+
+    val contentValues = ContentValues().apply {
+        put(MediaStore.MediaColumns.DISPLAY_NAME, name)
+        put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-Image")
+        }
     }
-    return Bitmap.createBitmap(this, 0,0,width,height, matrix, false)
+
+    val outputOptions = ImageCapture.OutputFileOptions.Builder(
+        context.contentResolver,
+        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+        contentValues
+    ).build()
+
+    imageCapture.takePicture(
+        outputOptions,
+        ContextCompat.getMainExecutor(context),
+        object : ImageCapture.OnImageSavedCallback {
+            override fun onError(exception: ImageCaptureException) {
+                Log.e("Error", "Photo capture failed: ${exception.message}", exception)
+            }
+
+            override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                val savedUri = outputFileResults.savedUri
+                onImageCapture(savedUri!!)
+            }
+        })
 }

@@ -30,23 +30,16 @@ class JkCameraWidget(
     private var hasCameraPermission by mutableStateOf(false)
 
     init {
-        // Kiểm tra quyền ngay khi khởi tạo
-        if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-            // Nếu đã có quyền, cập nhật trạng thái
+        if (PermissionHandler().hasCameraPermission(activity)) {
             hasCameraPermission = true
         } else {
-            // Nếu chưa có, yêu cầu quyền.
-            // Phương thức này cần được triển khai để cập nhật `hasCameraPermission` sau khi có kết quả
             PermissionHandler().requestCameraPermission(activity)
         }
-
         cameraView.setViewTreeLifecycleOwner(lifecycleOwner)
         cameraView.setContent {
-            // UI sẽ tự động cập nhật khi `hasCameraPermission` thay đổi
             if (hasCameraPermission) {
                 JkCameraView()
             } else {
-                // Hiển thị UI khi không có quyền
                 PermissionDeniedScreen {
                     PermissionHandler().requestCameraPermission(activity)
                 }
