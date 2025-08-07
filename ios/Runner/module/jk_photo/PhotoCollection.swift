@@ -238,6 +238,8 @@ class PhotoCollection: NSObject, ObservableObject {
         // Nếu không có fetchResult được truyền vào, tạo mới
         if newFetchResult == nil {
             let fetchOptions = PHFetchOptions()
+            // chỉ lấy image
+            fetchOptions.predicate = NSPredicate(format: "mediaType == %d", PHAssetMediaType.image.rawValue)
             // Sắp xếp theo ngày tạo, mới nhất lên đầu
             fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
             if let assetCollection = self.assetCollection, let fetchResult = (PHAsset.fetchAssets(in: assetCollection, options: fetchOptions) as AnyObject?) as? PHFetchResult<PHAsset> {
