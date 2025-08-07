@@ -32,11 +32,14 @@
 	<!-- Quyền truy cập camera  -->
 	<key>NSCameraUsageDescription</key>
     <string>The app needs access to the camera to take photos.</string>
-	<!-- Quyền truy cập Photo Library -->
+	
+	<!-- Quyền truy cập Photo Library (đọc và xem ảnh) -->
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>The app needs access to the photo library to select images.</string>
+	<string>The app needs access to your photos to display them in the gallery and select images.</string>
+	
+	<!-- Quyền thêm ảnh vào Photo Library -->
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>The app needs permission to save images to your library.</string>
+	<string>The app needs permission to save images to your photo library.</string>
 
 	<key>UISupportedInterfaceOrientations</key>
 	<array>

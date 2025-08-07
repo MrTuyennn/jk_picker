@@ -16,8 +16,17 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
+		C067F1E72E445DCF00876093 /* PhotoLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C067F1E62E445DC800876093 /* PhotoLibrary.swift */; };
+		C067F1E92E44689900876093 /* PhotoCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C067F1E82E44689200876093 /* PhotoCollection.swift */; };
+		C067F1EB2E44853A00876093 /* PhotoAssetCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C067F1EA2E44852B00876093 /* PhotoAssetCollection.swift */; };
+		C067F1ED2E44862C00876093 /* PhotoAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = C067F1EC2E44862500876093 /* PhotoAsset.swift */; };
+		C067F1EF2E44893900876093 /* CachedImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C067F1EE2E44892B00876093 /* CachedImageManager.swift */; };
+		C067F1F12E448EB900876093 /* PhotoCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C067F1F02E448EAE00876093 /* PhotoCollectionView.swift */; };
+		C067F1F32E448F0B00876093 /* ThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C067F1F22E448F0A00876093 /* ThumbnailView.swift */; };
 		C0A20CC52E38A7DB00C7B95A /* JkImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A20CC42E38A7CD00C7B95A /* JkImagePicker.swift */; };
 		C0A20CC72E38AD2B00C7B95A /* AppConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A20CC62E38AD1F00C7B95A /* AppConstant.swift */; };
+		C0C341392E4497B9009306E8 /* PhotoItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0C341382E4497B8009306E8 /* PhotoItemView.swift */; };
+		C0C3413B2E449885009306E8 /* PhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0C3413A2E449881009306E8 /* PhotoView.swift */; };
 		C0CE3DD52E3B193100007061 /* JKCameraWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CE3DD42E3B191E00007061 /* JKCameraWidget.swift */; };
 		C0CE3DD72E3B199B00007061 /* JKCameraFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CE3DD62E3B199500007061 /* JKCameraFactory.swift */; };
 		C0CE3DD92E3B1D8600007061 /* JKCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CE3DD82E3B1D8000007061 /* JKCameraView.swift */; };
@@ -69,8 +78,17 @@
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A79BBEE80AAB3C4C8F774350 /* Pods_RunnerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunnerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C067F1E62E445DC800876093 /* PhotoLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibrary.swift; sourceTree = "<group>"; };
+		C067F1E82E44689200876093 /* PhotoCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollection.swift; sourceTree = "<group>"; };
+		C067F1EA2E44852B00876093 /* PhotoAssetCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAssetCollection.swift; sourceTree = "<group>"; };
+		C067F1EC2E44862500876093 /* PhotoAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAsset.swift; sourceTree = "<group>"; };
+		C067F1EE2E44892B00876093 /* CachedImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedImageManager.swift; sourceTree = "<group>"; };
+		C067F1F02E448EAE00876093 /* PhotoCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionView.swift; sourceTree = "<group>"; };
+		C067F1F22E448F0A00876093 /* ThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailView.swift; sourceTree = "<group>"; };
 		C0A20CC42E38A7CD00C7B95A /* JkImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JkImagePicker.swift; sourceTree = "<group>"; };
 		C0A20CC62E38AD1F00C7B95A /* AppConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstant.swift; sourceTree = "<group>"; };
+		C0C341382E4497B8009306E8 /* PhotoItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoItemView.swift; sourceTree = "<group>"; };
+		C0C3413A2E449881009306E8 /* PhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoView.swift; sourceTree = "<group>"; };
 		C0CE3DD42E3B191E00007061 /* JKCameraWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JKCameraWidget.swift; sourceTree = "<group>"; };
 		C0CE3DD62E3B199500007061 /* JKCameraFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JKCameraFactory.swift; sourceTree = "<group>"; };
 		C0CE3DD82E3B1D8000007061 /* JKCameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JKCameraView.swift; sourceTree = "<group>"; };
@@ -186,6 +204,15 @@
 		C0058B262E3CB4E8008D283A /* jk_photo */ = {
 			isa = PBXGroup;
 			children = (
+				C0C3413A2E449881009306E8 /* PhotoView.swift */,
+				C0C341382E4497B8009306E8 /* PhotoItemView.swift */,
+				C067F1F22E448F0A00876093 /* ThumbnailView.swift */,
+				C067F1F02E448EAE00876093 /* PhotoCollectionView.swift */,
+				C067F1EE2E44892B00876093 /* CachedImageManager.swift */,
+				C067F1EC2E44862500876093 /* PhotoAsset.swift */,
+				C067F1EA2E44852B00876093 /* PhotoAssetCollection.swift */,
+				C067F1E82E44689200876093 /* PhotoCollection.swift */,
+				C067F1E62E445DC800876093 /* PhotoLibrary.swift */,
 			);
 			path = jk_photo;
 			sourceTree = "<group>";
@@ -446,15 +473,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C0C341392E4497B9009306E8 /* PhotoItemView.swift in Sources */,
+				C067F1EB2E44853A00876093 /* PhotoAssetCollection.swift in Sources */,
 				C0A20CC52E38A7DB00C7B95A /* JkImagePicker.swift in Sources */,
+				C067F1E72E445DCF00876093 /* PhotoLibrary.swift in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
+				C067F1F12E448EB900876093 /* PhotoCollectionView.swift in Sources */,
+				C0C3413B2E449885009306E8 /* PhotoView.swift in Sources */,
 				C0CE3DD92E3B1D8600007061 /* JKCameraView.swift in Sources */,
 				C0CE3DD52E3B193100007061 /* JKCameraWidget.swift in Sources */,
+				C067F1EF2E44893900876093 /* CachedImageManager.swift in Sources */,
+				C067F1ED2E44862C00876093 /* PhotoAsset.swift in Sources */,
 				C0CE3DD72E3B199B00007061 /* JKCameraFactory.swift in Sources */,
+				C067F1F32E448F0B00876093 /* ThumbnailView.swift in Sources */,
 				C0CE3DDB2E3B26B800007061 /* CameraModel.swift in Sources */,
 				C0A20CC72E38AD2B00C7B95A /* AppConstant.swift in Sources */,
 				C0CE3DDF2E3B663500007061 /* JKViewfinderView.swift in Sources */,
+				C067F1E92E44689900876093 /* PhotoCollection.swift in Sources */,
 				C0CE3DDD2E3B273000007061 /* Camera.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -551,7 +587,7 @@
 				DEVELOPMENT_TEAM = UMWAV3889L;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -735,7 +771,7 @@
 				DEVELOPMENT_TEAM = UMWAV3889L;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -759,7 +795,7 @@
 				DEVELOPMENT_TEAM = UMWAV3889L;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -11,7 +11,7 @@ import os.log
 
 final class CameraModel: ObservableObject {
     let camera = Camera()
-   // let photoCollection = PhotoCollection(smartAlbum: .smartAlbumUserLibrary)
+    let photoCollection = PhotoCollection(smartAlbum: .smartAlbumUserLibrary)
     
     @Published var viewfinderImage: Image?
     @Published var thumbnailImage: Image?
@@ -23,9 +23,9 @@ final class CameraModel: ObservableObject {
             await handleCameraPreviews()
         }
         
-//        Task {
-//            await handleCameraPhotos()
-//        }
+        Task {
+            await handleCameraPhotos()
+        }
     }
     
     func handleCameraPreviews() async {
@@ -69,45 +69,45 @@ final class CameraModel: ObservableObject {
     }
     
     func savePhoto(imageData: Data) {
-//        Task {
-//            do {
-//                try await photoCollection.addImage(imageData)
-//                LoggerCompat.debug("Added image data to photo collection.")
-//            } catch let error {
-//                LoggerCompat.error("Failed to add image to photo collection: \(error.localizedDescription)")
-//            }
-//        }
+        Task {
+            do {
+                try await photoCollection.addImage(imageData)
+                LoggerCompat.debug("Added image data to photo collection.")
+            } catch let error {
+                LoggerCompat.error("Failed to add image to photo collection: \(error.localizedDescription)")
+            }
+        }
     }
     
     func loadPhotos() async {
-//        guard !isPhotosLoaded else { return }
-//        
-//        let authorized = await PhotoLibrary.checkAuthorization()
-//        guard authorized else {
-//            LoggerCompat.error("Photo library access was not authorized.")
-//            return
-//        }
+        guard !isPhotosLoaded else { return }
         
-//        Task {
-//            do {
-//                try await self.photoCollection.load()
-//                await self.loadThumbnail()
-//            } catch let error {
-//                LoggerCompat.error("Failed to load photo collection: \(error.localizedDescription)")
-//            }
-//            self.isPhotosLoaded = true
-//        }
+        let authorized = await PhotoLibrary.checkAuthorization()
+        guard authorized else {
+            LoggerCompat.error("Photo library access was not authorized.")
+            return
+        }
+        
+        Task {
+            do {
+                try await self.photoCollection.load()
+                await self.loadThumbnail()
+            } catch let error {
+                LoggerCompat.error("Failed to load photo collection: \(error.localizedDescription)")
+            }
+            self.isPhotosLoaded = true
+        }
     }
     
     func loadThumbnail() async {
-//        guard let asset = photoCollection.photoAssets.first  else { return }
-//        await photoCollection.cache.requestImage(for: asset, targetSize: CGSize(width: 256, height: 256))  { result in
-//            if let result = result {
-//                Task { @MainActor in
-//                    self.thumbnailImage = result.image
-//                }
-//            }
-//        }
+        guard let asset = photoCollection.photoAssets.first  else { return }
+        await photoCollection.cache.requestImage(for: asset, targetSize: CGSize(width: 256, height: 256))  { result in
+            if let result = result {
+                Task { @MainActor in
+                    self.thumbnailImage = result.image
+                }
+            }
+        }
     }
 }
 

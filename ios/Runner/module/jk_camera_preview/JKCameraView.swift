@@ -14,7 +14,7 @@ struct JKCameraView: View {
     private static let barHeightFactor = 0.15
     
     var body: some View {
-        
+        NavigationStack {
             GeometryReader { geometry in
                 JKViewfinderView(image:  $model.viewfinderImage )
                     .overlay(alignment: .top) {
@@ -41,6 +41,7 @@ struct JKCameraView: View {
                 await model.loadPhotos()
                 await model.loadThumbnail()
             }
+        }
     }
     
     private func buttonsView() -> some View {
@@ -48,21 +49,21 @@ struct JKCameraView: View {
             
             Spacer()
             
-//            NavigationLink {
-//                PhotoCollectionView(photoCollection: model.photoCollection)
-//                    .onAppear {
-//                        model.camera.isPreviewPaused = true
-//                    }
-//                    .onDisappear {
-//                        model.camera.isPreviewPaused = false
-//                    }
-//            } label: {
-//                Label {
-//                    Text("Gallery")
-//                } icon: {
-//                  //  ThumbnailView(image: model.thumbnailImage)
-//                }
-//            }
+            NavigationLink {
+                PhotoCollectionView(photoCollection: model.photoCollection)
+                    .onAppear {
+                        model.camera.isPreviewPaused = true
+                    }
+                    .onDisappear {
+                        model.camera.isPreviewPaused = false
+                    }
+            } label: {
+                Label {
+                    Text("Gallery")
+                } icon: {
+                   ThumbnailView(image: model.thumbnailImage)
+                }
+            }
             
             Button {
                 model.camera.takePhoto()
@@ -98,3 +99,4 @@ struct JKCameraView: View {
     }
     
 }
+
