@@ -40,6 +40,8 @@ struct JKCameraView: View {
                 await model.camera.start()
                 await model.loadPhotos()
                 await model.loadThumbnail()
+            }.onDisappear{
+                model.camera.stop()
             }
         }
     }
